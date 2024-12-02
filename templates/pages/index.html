@@ -1,0 +1,43 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Allam Store{% endblock %}
+
+{% block navbar %} {% include "components/navbar.html" %}{% endblock %}
+
+{% block contents %}
+
+<div class="hero text-center">
+    <div class="container text-dark">
+        <h1>Selamat datang di Bookstore</h1>
+        <p>Temukan bacaan hebat Anda berikutnya!</p>
+        <form class="d-flex justify-content-center mt-4">
+            <input class="form-control me-2" type="search" placeholder="Cari buku..." aria-label="Search">
+            <button class="btn btn-primary" type="submit">Cari</button>
+        </form>
+    </div>
+</div>
+
+<div class="container mt-5">
+    <h2 class="text-center">Featured Books</h2>
+    <div class="row">
+        {% for buku in produk %}
+        <div class="col-md-4">
+            <div class="card mb-4">
+                <img src="{{ buku.sampul_buku.url}}" class="card-img-top" alt="Book 1" height="472" width="400">
+                <div class="card-body">
+                    <h5 class="card-title">{{ buku.judul_buku}}</h5>
+                    <p class="card-text">Penulis: {{ buku.penulis_buku}}</p>
+                    <p class="card-text">Jumlah: {{ buku.jumlah_buku}}</p>
+                    <p class="card-text">{{ buku.harga_buku}}</p>
+                    <a href="{% url 'detail' id=buku.id%}" class="btn btn-primary">Selengkapnya</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
+
+{% block footer %} {% include "components/footer.html" %}{% endblock %}

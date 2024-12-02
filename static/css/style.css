@@ -1,0 +1,6 @@
+.hero {
+    background-image: url('https://source.unsplash.com/1600x900/?books');
+    background-size: cover;
+    color: white;
+    padding: 100px 0;
+}
