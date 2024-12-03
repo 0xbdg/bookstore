@@ -35,14 +35,14 @@
 
     <h3>Spesifikasi lengkap</h3>
     <ul>
-        <li><strong>ISBN:</strong> 123-4567890123</li>
-        <li><strong>Publisher:</strong> Example Publisher</li>
-        <li><strong>Tanggal Publikasi:</strong> January 1, 2023</li>
-        <li><strong>Lembar:</strong> 350</li>
-        <li><strong>Bahasa:</strong> English</li>
+        <li><strong>ISBN:</strong> {{ produk.isbn}}</li>
+        <li><strong>Publisher:</strong> {{ produk.publisher_buku}}</li>
+        <li><strong>Tanggal Publikasi:</strong> {{ produk.tanggal_publikasi}}</li>
+        <li><strong>Lembar:</strong> {{ produk.lembar_buku}}</li>
+        <li><strong>Bahasa:</strong> {{ produk.bahasa}}</li>
     </ul>
 
-    <h3>Related Books</h3>
+    <h3>Buku-buku terkait</h3>
     <div class="row">
         <div class="col-md-3">
             <div class="card">
@@ -64,7 +64,6 @@
                 </div>
             </div>
         </div>
-        <!-- Add more related books as needed -->
     </div>
 </div>
 {% endblock %}

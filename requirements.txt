@@ -1,3 +1,4 @@
 django
 django-money
 django-phonenumber-field
+midtransclient

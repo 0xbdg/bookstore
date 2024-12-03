@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% load static %}
 
-{% block title %}Allam Store{% endblock %}
+{% block title %}Book Store{% endblock %}
 
 {% block navbar %} {% include "components/navbar.html" %}{% endblock %}
 
@@ -11,15 +11,16 @@
     <div class="container text-dark">
         <h1>Selamat datang di Bookstore</h1>
         <p>Temukan bacaan hebat Anda berikutnya!</p>
-        <form class="d-flex justify-content-center mt-4">
-            <input class="form-control me-2" type="search" placeholder="Cari buku..." aria-label="Search">
+        <form class="d-flex justify-content-center mt-4" method="POST" action="{% url 'index'%}">
+            {% csrf_token %}
+            <input class="form-control me-2" type="search" name="pencarian" placeholder="Cari buku..." aria-label="Search">
             <button class="btn btn-primary" type="submit">Cari</button>
         </form>
     </div>
 </div>
 
 <div class="container mt-5">
-    <h2 class="text-center">Featured Books</h2>
+    <h2 class="text-center">Buku unggulan</h2>
     <div class="row">
         {% for buku in produk %}
         <div class="col-md-4">
