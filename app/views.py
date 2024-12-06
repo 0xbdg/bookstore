@@ -1,5 +1,5 @@
 from django.shortcuts import render
-
+from .forms import *
 from .models import *
 from .midtrans import midtrans_client_key,snap
 
@@ -18,6 +18,9 @@ def index(request):
     
 def signin(request):
     return render(request, "pages/login.html", context={})
+
+def signup(request):
+    return render(request, "pages/signup.html", context={})
 
 def settings(request):
     return render(request, "pages/profile_settings.html", context={})

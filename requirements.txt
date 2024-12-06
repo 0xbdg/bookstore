@@ -2,3 +2,4 @@ django
 django-money
 django-phonenumber-field
 midtransclient
+django-simple-captcha

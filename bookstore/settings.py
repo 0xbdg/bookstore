@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'app',
     'phonenumber_field',
-    'djmoney'
+    'djmoney',
+    'captcha',
 ]
 
 MIDDLEWARE = [
