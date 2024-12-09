@@ -3,7 +3,7 @@ from .forms import *
 from .models import *
 from .midtrans import midtrans_client_key,snap
 
-import datetime
+import datetime, random, string
 # Create your views here.
 
 def index(request):
@@ -29,7 +29,7 @@ def product_detail(request, id):
     buku = Buku.objects.get(id=id)
     transaction_token = snap.create_transaction_token({
         "transaction_details": {
-            "order_id": 878787,
+            "order_id": ''.join(random.choices(string.ascii_letters + string.digits, k=10)),
             "gross_amount": 500000,
         }, "credit_card":{
             "secure" : True
