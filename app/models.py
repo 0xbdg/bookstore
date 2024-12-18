@@ -34,5 +34,7 @@ class Buku(models.Model):
         verbose_name_plural = "Produk"
 
 class Pemesanan(models.Model):
-    pembeli = models.ForeignKey(User,on_delete=models.CASCADE)
-
+    #pembeli = models.ForeignKey(User,on_delete=models.CASCADE)
+    order_id = models.CharField(max_length=10)
+    fraud_status = models.CharField(max_length=255)
+    transaction_status = models.CharField(max_length=255)

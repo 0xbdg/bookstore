@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{% endblock %}
+
+{% block navbar %} {% include "components/navbar.html" %}{% endblock %}
+
+{% block contents %}
+<div class="container mt-5">
+    <h2 class="mb-3">Transaction Summary</h2>
+    <div class="card">
+        <div class="card-body">
+            <h5 class="card-title">Transaction Details</h5>
+            <p class="card-text"><strong>Transaction ID:</strong> <span id="summaryTransactionId">N/A</span></p>
+            <p class="card-text"><strong>Amount:</strong> <span id="summaryAmount">N/A</span></p>
+            <p class="card-text"><strong>Date:</strong> <span id="summaryDate">N/A</span></p>
+            <p class="card-text"><strong>Description:</strong> <span id="summaryDescription">N/A</span></p>
+            <button class="btn btn-success" id="confirmButton">Confirm Transaction</button>
+            <button class="btn btn-danger" id="cancelButton">Cancel Transaction</button>
+        </div>
+    </div>
+
+    <hr class="my-4">
+
+    <header class="text-center my-4">
+        <h1>Riwayat Transaksi</h1>
+        <p>Manage your transactions easily</p>
+    </header>
+
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card transaction-card">
+                <div class="card-header">
+                    <h5 class="mb-0">Transaction Summary</h5>
+                </div>
+                <div class="card-body">
+                    <h6>Total Transactions: <span class="badge bg-primary">5</span></h6>
+                    <h6>Total Amount: <span class="text-success">$500.00</span></h6>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <hr class="my-4">
+
+    <div class="row">
+        <div class="col-md-12">
+            <div class="card transaction-card">
+                <div class="card-header">
+                    <h5 class="mb-0">Transaction History</h5>
+                </div>
+                <div class="card-body">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th>Date</th>
+                                <th>Description</th>
+                                <th>Amount</th>
+                                <th>Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>2023-10-01</td>
+                                <td>Payment Received</td>
+                                <td>$100.00</td>
+                                <td><span class="badge bg-success">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>2023-10-05</td>
+                                <td>Payment Sent</td>
+                                <td>$50.00</td>
+                                <td><span class="badge bg-warning">Pending</span></td>
+                            </tr>
+                            <tr>
+                                <td>2023-10-10</td>
+                                <td>Refund Issued</td>
+                                <td>$20.00</td>
+                                <td><span class="badge bg-danger">Failed</span></td>
+                            </tr>
+                            <tr>
+                                <td>2023-10-15</td>
+                                <td>Payment Received</td>
+                                <td>$200.00</td>
+                                <td><span class="badge bg-success">Completed</span></td>
+                            </tr>
+                            <tr>
+                                <td>2023-10-20</td>
+                                <td>Payment Sent</td>
+                                <td>$130.00</td>
+                                <td><span class="badge bg-success">Completed</span></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block footer %}{% endblock %}

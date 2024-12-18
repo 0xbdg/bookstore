@@ -1,9 +1,12 @@
 from django.shortcuts import render
+from django.http import JsonResponse
+from django.views.decorators.csrf import csrf_exempt
+
 from .forms import *
 from .models import *
-from .midtrans import midtrans_client_key,snap
+from .midtrans import midtrans_client_key,snap, core_api
 
-import datetime, random, string
+import datetime, random, string,json
 # Create your views here.
 
 def index(request):
@@ -50,3 +53,33 @@ def product_detail(request, id):
     })
     return render(request, "pages/product_detail.html", context={"produk":buku, "client_key":midtrans_client_key, "token":transaction_token})
 
+def transaction(request):
+    return render(request, "pages/transaction.html")
+
+@csrf_exempt
+def status(request):
+    try:
+        if request.method == "POST":
+            data = json.loads(request.body)
+            fraud_status = data["fraud_status"]
+            transaction_status = core_api.transactions.status(data["transaction_id"])
+
+            if transaction_status == 'capture':
+                if fraud_status == 'challenge':
+                    Pemesanan(fraud_status="challenge").save()
+                elif fraud_status == 'accept':
+                    Pemesanan(fraud_status="accept").save()
+            elif transaction_status == 'settlement':
+                Pemesanan(transaction_status="settlement").save()
+            elif transaction_status == 'cancel' or transaction_status == 'deny' or transaction_status == 'expire':
+                Pemesanan(transaction_status="failure").save()
+            elif transaction_status == 'pending':
+                Pemesanan(transaction_status="pending").save()
+            elif transaction_status == 'refund':
+                Pemesanan(fraud_status="refund").save()
+
+            print(data)
+
+            return JsonResponse({"data":data})
+    except:
+        pass
