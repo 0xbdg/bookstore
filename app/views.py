@@ -49,14 +49,14 @@ def product_detail(request, id):
         if "login_dulu" in request.POST:
             return redirect("login")
         user = User.objects.get(username=request.user.get_username())
-        keranjang = Keranjang(pembeli=user, order_id="".join(random.choices(string.ascii_letters + string.digits, k=10)),produk=buku.judul_buku, jumlah=request.POST["quantity"])
+        keranjang = Keranjang(pembeli=user,harga=buku.harga_buku, order_id="".join(random.choices(string.ascii_letters + string.digits, k=10)),produk=buku.judul_buku)
         keranjang.save()
         return redirect("cart")
 
     transaction_token = snap.create_transaction_token({
         "transaction_details": {
             "order_id": ''.join(random.choices(string.ascii_letters + string.digits, k=10)),
-            "gross_amount": 500000,
+            "gross_amount": buku.harga_buku,
         }, "credit_card":{
             "secure" : True
         },
@@ -69,8 +69,8 @@ def product_detail(request, id):
         "product_details": {
             "product_id":"",
             "product_name":"",
-            "quantity": buku.jumlah_buku,
-            "price": 500000
+            "quantity": 1,
+            "price": buku.harga_buku
         }
     })
     return render(request, "pages/product_detail.html", context={"produk":buku, "client_key":midtrans_client_key, "token":transaction_token})
@@ -85,13 +85,12 @@ def cart(request):
             hapus = Keranjang.objects.get(id=product_id)
             hapus.delete()  
         
-        if "update" in request.POST:
-            product_id = request.POST["product_id"]
-            update = Keranjang.objects.get(id=product_id)
     return render(request, "pages/cart.html", context={"lists":keranjang})
 
 @login_required
 def transaction(request):
+    user = User.objects.get(username=request.user.get_username())
+    produk = Keranjang.objects.get()
     return render(request, "pages/transaction.html")
 
 @login_required
@@ -99,5 +98,32 @@ def signout(request):
     logout(request)
     return redirect("index")
 
-def checkout(request):
-    return render(request, "pages/pembayaran.html")
+@login_required
+def checkout(request, product_id):
+    user = User.objects.get(username=request.user.get_username())
+    produk = Keranjang.objects.get(id=product_id, pembeli=user)
+    transaction_token = snap.create_transaction_token({
+        "transaction_details": {
+            "order_id": produk.order_id,
+            "gross_amount": produk.harga,
+        }, "credit_card":{
+            "secure" : True
+        },
+        "customer_details": {
+            "first_name": user.first_name,
+            "last_name": user.last_name,
+            "email": "test@mail.com",
+            "phone": "+62812345678",
+        },
+        "product_details": {
+            "product_id":produk.id,
+            "product_name":produk.produk,
+            "quantity": 1,
+            "price": produk.harga
+        }
+    })
+    
+    return render(request, "pages/pembayaran.html", context={"barang":produk,"client_key":midtrans_client_key, "token":transaction_token})
+
+def about(request):
+    return render(request,"pages/about.html")

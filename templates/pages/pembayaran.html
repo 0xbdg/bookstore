@@ -12,59 +12,39 @@
     </div>
     <div class="d-flex align-items-center justify-content-between mb-3">
         <div class="d-flex align-items-center">
-            <img alt="Black hoodie" class="me-2" height="50" src="https://storage.googleapis.com/a1aa/image/p3VnaYADUfSXDix0A5MfX6XAZ2MFtx4dO6wdt4slmx7pLe5nA.jpg" width="50" />
+            <img alt="Black hoodie" class="me-2" height="50" src="https://via.placeholder.com/250x250/5fa9f8/ffffff" width="50" />
             <span class="me-2">
-                1
-            </span>
-            <span class="me-2">
-                x
-            </span>
-            <span>
-                Hoodie - L
+                {{ barang.produk}}
             </span>
         </div>
         <div>
-            IDR 149.000
+            IDR {{ barang.harga}}
         </div>
     </div>
-    <div class="d-flex align-items-center justify-content-between mb-3">
-        <div class="d-flex align-items-center">
-            <img alt="Black hoodie" class="me-2" height="50" src="https://storage.googleapis.com/a1aa/image/p3VnaYADUfSXDix0A5MfX6XAZ2MFtx4dO6wdt4slmx7pLe5nA.jpg" width="50" />
-            <span class="me-2">
-                1
-            </span>
-            <span class="me-2">
-                x
-            </span>
-            <span>
-                Hoodie - S
-            </span>
-        </div>
-        <div>
-            IDR 99.000
-        </div>
-    </div>
-    <div class="d-flex justify-content-between border-top pt-3">
-        <span>
-            Subtotal
-        </span>
-        <span>
-            IDR 248.000
-        </span>
-    </div>
-    <button id="pay-button" class="btn btn-dark w-100 mt-3">
+    <input type='hidden' id='snap_token' value="{{ token }}"/>
+    <button id="checkout" class="btn btn-dark w-100 mt-3">
         Checkout
     </button>
 </div>
 
-<div id="snap-container"></div>
-
-<script type="text/javascript">
-    var payButton = document.getElementById('pay-button');
-    payButton.addEventListener('click', function () {
-      window.snap.embed('YOUR_SNAP_TOKEN', {
-        embedId: 'snap-container'
-      });
-    });
+<script>
+    var token = document.querySelectorAll('#snap_token')[0].value;
+    
+    var checkoutBtn = document.querySelectorAll('#checkout')[0];
+    checkoutBtn.onclick = function(){
+            // Open Snap popup with defined callbacks.
+        snap.pay(token, {
+            onSuccess: function(result) {
+                alert("Payment accepted");
+            },
+            onPending: function(result) {
+                alert("Payment pending");
+            },
+            onError: function() {
+                console.log("Payment error");
+            }
+        });
+            // For more advanced use, refer to: https://snap-docs.midtrans.com/#snap-js
+    }
 </script>
 {% endblock %}

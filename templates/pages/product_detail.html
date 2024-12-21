@@ -23,8 +23,8 @@
             <form method="POST" action="">
                 {% csrf_token %}
                 <div class="mb-3">
-                    <label for="quantity" class="form-label">Jumlah buku</label>
-                    <input type="number" class="form-control" name="quantity" id="quantity" value="1" min="1" max="{{ produk.jumlah_buku}}">
+                    <label for="quantity" class="form-label" style="display:none">Jumlah buku</label>
+                    <input type="number" class="form-control" style="display:none"name="quantity" id="quantity" value="1" min="1" max="{{ produk.jumlah_buku}}">
                 </div>
                 {% if user.is_authenticated %}
                 <button type="submit" class="btn btn-primary btn-lg">Simpan ke keranjang</button>
@@ -34,7 +34,7 @@
 
             </form>
             <input type='hidden' id='snap_token' value="{{ token }}"/>
-            <button class="btn btn-outline-secondary btn-lg" id="checkout">Beli langsung</button>
+            <button style="display:none" class="btn btn-outline-secondary btn-lg" id="checkout">Beli langsung</button>
         </div>
     </div>
 
@@ -49,6 +49,7 @@
         <li><strong>Publisher:</strong> {{ produk.publisher_buku}}</li>
         <li><strong>Tanggal Publikasi:</strong> {{ produk.tanggal_publikasi}}</li>
         <li><strong>Lembar:</strong> {{ produk.lembar_buku}}</li>
+        <li><strong>Kategori:</strong> {{ produk.kategori}}</li>
         <li><strong>Bahasa:</strong> {{ produk.bahasa}}</li>
     </ul>
 

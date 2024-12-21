@@ -30,7 +30,7 @@
                     <h5 class="card-title">{{ buku.judul_buku}}</h5>
                     <p class="card-text">Penulis: {{ buku.penulis_buku}}</p>
                     <p class="card-text">Jumlah: {{ buku.jumlah_buku}}</p>
-                    <p class="card-text">{{ buku.harga_buku}}</p>
+                    <p class="card-text">Rp. {{ buku.harga_buku}}</p>
                     <a href="{% url 'detail' id=buku.id%}" class="btn btn-primary">Selengkapnya</a>
                 </div>
             </div>
