@@ -24,9 +24,14 @@
                 {% csrf_token %}
                 <div class="mb-3">
                     <label for="quantity" class="form-label">Jumlah buku</label>
-                    <input type="number" class="form-control" id="quantity" value="1" min="1" max="{{ produk.jumlah_buku}}">
+                    <input type="number" class="form-control" name="quantity" id="quantity" value="1" min="1" max="{{ produk.jumlah_buku}}">
                 </div>
-                <button class="btn btn-primary btn-lg">Simpan ke keranjang</button>
+                {% if user.is_authenticated %}
+                <button type="submit" class="btn btn-primary btn-lg">Simpan ke keranjang</button>
+                {% else %}
+                <button name="login_dulu" onclick="window.location.href='{% url 'login'%}'" class="btn btn-primary btn-lg">Simpan ke keranjang</button>
+                {% endif %}
+
             </form>
             <input type='hidden' id='snap_token' value="{{ token }}"/>
             <button class="btn btn-outline-secondary btn-lg" id="checkout">Beli langsung</button>
@@ -81,11 +86,9 @@ checkoutBtn.onclick = function(){
         // Open Snap popup with defined callbacks.
     snap.pay(token, {
         onSuccess: function(result) {
-            console.log("SUCCESS", result);
             alert("Payment accepted \r\n"+JSON.stringify(result));
         },
         onPending: function(result) {
-            console.log("Payment pending", result);
             alert("Payment pending \r\n"+JSON.stringify(result));
         },
         onError: function() {

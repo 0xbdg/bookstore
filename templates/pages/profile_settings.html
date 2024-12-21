@@ -38,8 +38,8 @@
   </form>
   <br>
   <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#changePasswordModal">Change Password</button>
-  <button type="reset" class="btn btn-secondary">Reset Password</button>
-  <button type="button" class="btn btn-danger">Logout</button>
+  <button type="button" class="btn btn-secondary">Reset Password</button>
+  <button type="submit" onclick="window.location.href='{% url 'logout'%}'" class="btn btn-danger">Logout</button>
 </div>
 
 <!-- Change Password Modal -->

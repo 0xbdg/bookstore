@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from phonenumber_field.modelfields import PhoneNumberField
 from djmoney.models.fields import MoneyField
 from django.core.exceptions import ValidationError
-import re
+import re, uuid
 # Create your models here.
 
 def validate_isbn(value):
@@ -19,7 +19,7 @@ class Buku(models.Model):
     penulis_buku = models.CharField(max_length=255)
     deskripsi_buku = models.TextField(null=False, blank=False)
     jumlah_buku = models.IntegerField(null=False, blank=False)
-    harga_buku = MoneyField(max_digits=100, decimal_places=2, default_currency='IDR')
+    harga_buku = MoneyField(max_digits=100, default_currency='IDR')
     isbn = models.CharField(max_length=17, unique=True, validators=[validate_isbn])
     publisher_buku = models.CharField(max_length=255,null=False, blank=False)
     tanggal_publikasi = models.DateField(null=False,blank=False)
@@ -33,8 +33,16 @@ class Buku(models.Model):
         verbose_name = "Buku"
         verbose_name_plural = "Produk"
 
-class Pemesanan(models.Model):
-    #pembeli = models.ForeignKey(User,on_delete=models.CASCADE)
+class Transaksi(models.Model):
+    token = models.CharField(max_length=255, null=False, blank=False)
+    pembeli = models.ForeignKey(User,on_delete=models.CASCADE)
     order_id = models.CharField(max_length=10)
-    fraud_status = models.CharField(max_length=255)
+    produk = models.CharField(max_length=255, null=False, blank=False)
     transaction_status = models.CharField(max_length=255)
+
+class Keranjang(models.Model):
+    id = models.CharField(primary_key=True, max_length=255, default=uuid.uuid1())
+    order_id = models.CharField(max_length=10, null=False, blank=False)
+    pembeli = models.ForeignKey(User, on_delete=models.CASCADE)
+    produk = models.CharField(max_length=255, null=False)
+    jumlah = models.IntegerField(null=False)

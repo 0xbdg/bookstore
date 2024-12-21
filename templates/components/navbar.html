@@ -13,24 +13,24 @@
                 <li class="nav-item">
                     <a class="nav-link" href="#">Tentang</a>
                 </li>
+                {% if user.is_authenticated %}
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Hubungi</a>
+                    <a class="nav-link" href="{% url 'profile'%}"><i class="bi bi-person-circle"></i> Profil</a>
                 </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'cart'%}"><i class="fas fa-cart-fill"></i>Keranjang</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'transaction'%}"><i class="fas fa-cart-fill"></i>Transaksi</a>
+                </li>
+                {% else %}
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'signup'%}">Sign Up</a>
                 </li>
                 <li class="nav-item">
                     <a class="nav-link" href="{% url 'login'%}">Login</a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'profile'%}"><i class="bi bi-person-circle"></i> Profil</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#"><i class="fas fa-cart-fill"></i>Keranjang</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'transaction'%}"><i class="fas fa-cart-fill"></i>Transaksi</a>
-                </li>
+                {% endif %}
             </ul>
         </div>
     </div>

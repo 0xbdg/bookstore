@@ -1,5 +1,8 @@
 django
 django-money
 django-phonenumber-field
+django-jazzmin
+phonenumbers
 midtransclient
 django-simple-captcha
+python-dotenv

@@ -1,4 +1,7 @@
-from django.shortcuts import render
+from django.shortcuts import render, redirect
+from django.contrib.auth import logout, login
+from django.contrib.auth.decorators import login_required
+from django.views.decorators.csrf import csrf_exempt
 
 from .forms import *
 from .models import *
@@ -18,16 +21,38 @@ def index(request):
         return render(request, "pages/index.html", context={"produk":buku})
     
 def signin(request):
-    return render(request, "pages/login.html", context={})
+    form = SignIn(data=request.POST)
+
+    if form.is_valid():
+        user = form.get_user()
+        login(request, user)
+        return redirect("profile")
+    
+    return render(request, "pages/login.html", context={"form":form})
 
 def signup(request):
-    return render(request, "pages/signup.html", context={})
+    form = SignUp(request.POST)
 
+    if request.method == "POST":
+        if form.is_valid():
+            form.save()
+            return redirect("login")
+    return render(request, "pages/signup.html", context={"form":form})
+
+@login_required
 def settings(request):
     return render(request, "pages/profile_settings.html", context={})
 
 def product_detail(request, id):
     buku = Buku.objects.get(id=id)
+    if request.method == "POST":
+        if "login_dulu" in request.POST:
+            return redirect("login")
+        user = User.objects.get(username=request.user.get_username())
+        keranjang = Keranjang(pembeli=user, order_id="".join(random.choices(string.ascii_letters + string.digits, k=10)),produk=buku.judul_buku, jumlah=request.POST["quantity"])
+        keranjang.save()
+        return redirect("cart")
+
     transaction_token = snap.create_transaction_token({
         "transaction_details": {
             "order_id": ''.join(random.choices(string.ascii_letters + string.digits, k=10)),
@@ -40,7 +65,6 @@ def product_detail(request, id):
             "last_name": "Doe A",
             "email": "johndoe@email.com",
             "phone": "+62812345678",
-            "address":""
         },
         "product_details": {
             "product_id":"",
@@ -51,5 +75,29 @@ def product_detail(request, id):
     })
     return render(request, "pages/product_detail.html", context={"produk":buku, "client_key":midtrans_client_key, "token":transaction_token})
 
+@login_required
+def cart(request):
+    keranjang = Keranjang.objects.all()
+
+    if request.method=="POST":
+        if "delete" in request.POST:
+            product_id = request.POST["product_id"]
+            hapus = Keranjang.objects.get(id=product_id)
+            hapus.delete()  
+        
+        if "update" in request.POST:
+            product_id = request.POST["product_id"]
+            update = Keranjang.objects.get(id=product_id)
+    return render(request, "pages/cart.html", context={"lists":keranjang})
+
+@login_required
 def transaction(request):
     return render(request, "pages/transaction.html")
+
+@login_required
+def signout(request):
+    logout(request)
+    return redirect("index")
+
+def checkout(request):
+    return render(request, "pages/pembayaran.html")

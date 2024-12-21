@@ -6,22 +6,24 @@
 {% block navbar %}{% include "components/navbar.html" %}{% endblock %}
 
 {% block contents %}
+{% if form.errors%}
+{{ form.errors}}
+{% endif %}
 <div class="container mt-3">
   <h2>Login</h2>
-  <form action="" method="POST">
+  <form action="{% url 'login'%}" method="POST">
     {% csrf_token %}
     <div class="mb-3 mt-3">
-      <label for="email">Email:</label>
-      <input type="email" class="form-control" id="email" placeholder="Enter email" name="email">
+      <label for="email">Username:</label>
+      {{ form.username }}
     </div>
     <div class="mb-3">
       <label for="pwd">Password:</label>
-      <input type="password" class="form-control" id="pwd" placeholder="Enter password" name="password">
+      {{ form.password }}
     </div>
-    <div class="form-check mb-3">
-      <label class="form-check-label">
-        <input class="form-check-input" type="checkbox" name="remember"> Remember me
-      </label>
+    <div class="mb-3 mt-3">
+      <label for="captcha">Captcha:</label><br>
+      {{ form.captcha }}
     </div>
     <button type="submit" class="btn btn-primary">Submit</button>
   </form>

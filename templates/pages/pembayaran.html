@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+
+{% block midtrans %}<script type="text/javascript" src="https://app.sandbox.midtrans.com/snap/snap.js" data-client-key="{{ client_key }}"></script>{% endblock %}
+
+{% block contents %}
+<div class="container mt-5">
+    <div class="d-flex align-items-center mb-3">
+        <i class="fas fa-shopping-cart me-2"> </i>
+        <h4 class="m-0">
+            Your payment
+        </h4>
+    </div>
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <div class="d-flex align-items-center">
+            <img alt="Black hoodie" class="me-2" height="50" src="https://storage.googleapis.com/a1aa/image/p3VnaYADUfSXDix0A5MfX6XAZ2MFtx4dO6wdt4slmx7pLe5nA.jpg" width="50" />
+            <span class="me-2">
+                1
+            </span>
+            <span class="me-2">
+                x
+            </span>
+            <span>
+                Hoodie - L
+            </span>
+        </div>
+        <div>
+            IDR 149.000
+        </div>
+    </div>
+    <div class="d-flex align-items-center justify-content-between mb-3">
+        <div class="d-flex align-items-center">
+            <img alt="Black hoodie" class="me-2" height="50" src="https://storage.googleapis.com/a1aa/image/p3VnaYADUfSXDix0A5MfX6XAZ2MFtx4dO6wdt4slmx7pLe5nA.jpg" width="50" />
+            <span class="me-2">
+                1
+            </span>
+            <span class="me-2">
+                x
+            </span>
+            <span>
+                Hoodie - S
+            </span>
+        </div>
+        <div>
+            IDR 99.000
+        </div>
+    </div>
+    <div class="d-flex justify-content-between border-top pt-3">
+        <span>
+            Subtotal
+        </span>
+        <span>
+            IDR 248.000
+        </span>
+    </div>
+    <button id="pay-button" class="btn btn-dark w-100 mt-3">
+        Checkout
+    </button>
+</div>
+
+<div id="snap-container"></div>
+
+<script type="text/javascript">
+    var payButton = document.getElementById('pay-button');
+    payButton.addEventListener('click', function () {
+      window.snap.embed('YOUR_SNAP_TOKEN', {
+        embedId: 'snap-container'
+      });
+    });
+</script>
+{% endblock %}
