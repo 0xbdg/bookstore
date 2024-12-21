@@ -12,5 +12,6 @@ urlpatterns = [
     path('transaction/', transaction, name="transaction"),
     path('cart/', cart, name="cart"),
     path('product/<int:id>/', product_detail, name="detail"),
-    path("transaksi/pembayaran/<uuid:product_id>", checkout, name="pembayaran")
+    path("transaksi/pembayaran/<uuid:product_id>", checkout, name="pembayaran"),
+    path("check_transaction_status/", check_transaction_status)
 ]

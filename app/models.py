@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
 from phonenumber_field.modelfields import PhoneNumberField
-from djmoney.models.fields import MoneyField
 from django.core.exceptions import ValidationError
 import re, uuid
 # Create your models here.
@@ -34,14 +33,14 @@ class Buku(models.Model):
         verbose_name_plural = "Produk"
 
 class Transaksi(models.Model):
-    token = models.CharField(max_length=255, null=False, blank=False)
     pembeli = models.ForeignKey(User,on_delete=models.CASCADE)
     order_id = models.CharField(max_length=10)
-    produk = models.CharField(max_length=255, null=False, blank=False)
+    nama_produk = models.CharField(max_length=255, null=False, blank=False)
     transaction_status = models.CharField(max_length=255)
 
 class Keranjang(models.Model):
     id = models.CharField(primary_key=True, max_length=255, default=uuid.uuid1())
+    token = models.CharField(max_length=255, null=False, blank=False)
     order_id = models.CharField(max_length=10, null=False, blank=False)
     pembeli = models.ForeignKey(User, on_delete=models.CASCADE)
     produk = models.CharField(max_length=255, null=False)

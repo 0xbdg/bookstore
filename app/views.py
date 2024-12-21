@@ -2,6 +2,7 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import logout, login
 from django.contrib.auth.decorators import login_required
 from django.views.decorators.csrf import csrf_exempt
+from django.http import JsonResponse
 
 from .forms import *
 from .models import *
@@ -45,17 +46,11 @@ def settings(request):
 
 def product_detail(request, id):
     buku = Buku.objects.get(id=id)
-    if request.method == "POST":
-        if "login_dulu" in request.POST:
-            return redirect("login")
-        user = User.objects.get(username=request.user.get_username())
-        keranjang = Keranjang(pembeli=user,harga=buku.harga_buku, order_id="".join(random.choices(string.ascii_letters + string.digits, k=10)),produk=buku.judul_buku)
-        keranjang.save()
-        return redirect("cart")
+    orderid = "".join(random.choices(string.ascii_letters + string.digits, k=10))
 
     transaction_token = snap.create_transaction_token({
         "transaction_details": {
-            "order_id": ''.join(random.choices(string.ascii_letters + string.digits, k=10)),
+            "order_id": orderid,
             "gross_amount": buku.harga_buku,
         }, "credit_card":{
             "secure" : True
@@ -68,12 +63,21 @@ def product_detail(request, id):
         },
         "product_details": {
             "product_id":"",
-            "product_name":"",
+            "product_name":buku.judul_buku,
             "quantity": 1,
             "price": buku.harga_buku
         }
     })
-    return render(request, "pages/product_detail.html", context={"produk":buku, "client_key":midtrans_client_key, "token":transaction_token})
+
+    if request.method == "POST":
+        if "login_dulu" in request.POST:
+            return redirect("login")
+        user = User.objects.get(username=request.user.get_username())
+        keranjang = Keranjang(token=transaction_token,pembeli=user,harga=buku.harga_buku, order_id=orderid,produk=buku.judul_buku)
+        keranjang.save()
+        return redirect("cart")
+    
+    return render(request, "pages/product_detail.html", context={"produk":buku})
 
 @login_required
 def cart(request):
@@ -102,28 +106,15 @@ def signout(request):
 def checkout(request, product_id):
     user = User.objects.get(username=request.user.get_username())
     produk = Keranjang.objects.get(id=product_id, pembeli=user)
-    transaction_token = snap.create_transaction_token({
-        "transaction_details": {
-            "order_id": produk.order_id,
-            "gross_amount": produk.harga,
-        }, "credit_card":{
-            "secure" : True
-        },
-        "customer_details": {
-            "first_name": user.first_name,
-            "last_name": user.last_name,
-            "email": "test@mail.com",
-            "phone": "+62812345678",
-        },
-        "product_details": {
-            "product_id":produk.id,
-            "product_name":produk.produk,
-            "quantity": 1,
-            "price": produk.harga
-        }
-    })
     
-    return render(request, "pages/pembayaran.html", context={"barang":produk,"client_key":midtrans_client_key, "token":transaction_token})
+    return render(request, "pages/pembayaran.html", context={"barang":produk,"client_key":midtrans_client_key, "token":produk.token})
 
 def about(request):
     return render(request,"pages/about.html")
+
+@csrf_exempt
+def check_transaction_status(request):
+    if request.method == "POST":
+        data = request.POST.get("data")
+        with open("test.txt", "w") as p:
+            p.write(data)

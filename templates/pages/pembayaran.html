@@ -35,10 +35,53 @@
             // Open Snap popup with defined callbacks.
         snap.pay(token, {
             onSuccess: function(result) {
-                alert("Payment accepted");
+                $(document).ready(function() {
+                    // This will trigger the POST request as soon as the page loads
+                    var dataToSend = JSON.stringify(result);
+        
+                    $.ajax({
+                        url: '/check_transaction_status/',  // The URL defined in your urls.py
+                        type: 'POST',
+                        data: dataToSend,
+                        headers: {
+                            'X-CSRFToken': getCSRFToken()  // Include CSRF token in the header
+                        },
+                        success: function(response) {
+                            // Handle successful response
+                            console.log('Success:', response.message);
+                            alert('Response from server: ' + response.message);
+                        },
+                        error: function(xhr, status, error) {
+                            // Handle errors
+                            console.error('Error:', error);
+                            alert('Error: ' + error);
+                        }
+                    });
+                });
             },
             onPending: function(result) {
-                alert("Payment pending");
+                $(document).ready(function() {
+                    var dataToSend = JSON.stringify(result);
+        
+                    $.ajax({
+                        url: '/check_transaction_status/',
+                        type: 'POST',
+                        data: dataToSend,
+                        headers: {
+                            'X-CSRFToken': getCSRFToken()
+                        },
+                        success: function(response) {
+                            // Handle successful response
+                            console.log('Success:', response.message);
+                            alert('Response from server: ' + response.message);
+                        },
+                        error: function(xhr, status, error) {
+                            // Handle errors
+                            console.error('Error:', error);
+                            alert('Error: ' + error);
+                        }
+                    });
+                });
             },
             onError: function() {
                 console.log("Payment error");
@@ -46,5 +89,19 @@
         });
             // For more advanced use, refer to: https://snap-docs.midtrans.com/#snap-js
     }
-</script>
+
+    function getCSRFToken() {
+        var cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            var cookies = document.cookie.split(';');
+            for (var i = 0; i < cookies.length; i++) {
+                var cookie = cookies[i].trim();
+                if (cookie.substring(0, 10) === 'csrftoken=') {
+                    cookieValue = decodeURIComponent(cookie.substring(10));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
 {% endblock %}

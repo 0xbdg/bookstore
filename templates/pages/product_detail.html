@@ -77,28 +77,6 @@
         </div>
     </div>
 </div>
-<script>
-var token = document.querySelectorAll('#snap_token')[0].value;
-
-var checkoutBtn = document.querySelectorAll('#checkout')[0];
-checkoutBtn.onclick = function(){
-    console.log('opening snap popup:');
-        
-        // Open Snap popup with defined callbacks.
-    snap.pay(token, {
-        onSuccess: function(result) {
-            alert("Payment accepted \r\n"+JSON.stringify(result));
-        },
-        onPending: function(result) {
-            alert("Payment pending \r\n"+JSON.stringify(result));
-        },
-        onError: function() {
-            console.log("Payment error");
-        }
-    });
-        // For more advanced use, refer to: https://snap-docs.midtrans.com/#snap-js
-}
-</script>
 {% endblock %}
 
 {% block footer %}{% include "components/footer.html" %}{% endblock %}

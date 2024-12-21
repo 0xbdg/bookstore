@@ -2,6 +2,7 @@ django
 django-money
 django-phonenumber-field
 django-jazzmin
+djangorestframework
 phonenumbers
 midtransclient
 django-simple-captcha
